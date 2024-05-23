@@ -13,3 +13,18 @@ resources/backup/delete_light.png
 resources/backup/edit - Copy.png
 resources/backup/edit_dark.png
 resources/backup/edit_light.png
+__pycache__/ex_2.cpython-310.pyc
+__pycache__/Front_page.cpython-310.pyc
+__pycache__/main (explained).py
+__pycache__/main.cpython-310.pyc
+__pycache__/Main_App.cpython-310.pyc
+credentials/.env
+credentials/client_secret.json
+credentials/credentials.json
+db/backup/account(old).db
+db/database-Original.db
+db/sqlite-tools-win32-x86-3410200/sqldiff.exe
+db/sqlite-tools-win32-x86-3410200/sqlite3.exe
+db/sqlite-tools-win32-x86-3410200/sqlite3_analyzer.exe
+plyer-2.1.0-py2.py3-none-any.whl
+resources/amethyst.jpg
