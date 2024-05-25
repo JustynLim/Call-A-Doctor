@@ -26,5 +26,7 @@ db/database-Original.db
 db/sqlite-tools-win32-x86-3410200/sqldiff.exe
 db/sqlite-tools-win32-x86-3410200/sqlite3.exe
 db/sqlite-tools-win32-x86-3410200/sqlite3_analyzer.exe
-plyer-2.1.0-py2.py3-none-any.whl
 resources/amethyst.jpg
+plyer-2.1.0-py2.py3-none-any.whl
+main.py
+tempCodeRunnerFile.py
