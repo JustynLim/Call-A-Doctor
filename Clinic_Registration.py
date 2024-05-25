@@ -40,7 +40,8 @@ def create_tables():
             CLINIC_NAME TEXT PRIMARY KEY UNIQUE NOT NULL,
             CLINIC_ADDRESS TEXT NOT NULL,
             EMAIL TEXT,
-            PASSWORD TEXT,
+            PASSWORD_HASH TEXT,
+            RECORD_ID TEXT,
             ACTIVATION_CODE TEXT UNIQUE NOT NULL,
             FOREIGN KEY (ACTIVATION_CODE) REFERENCES KEY_LIST(ACTIVATION_CODE)
         )''')
@@ -48,11 +49,17 @@ def create_tables():
     cursor.execute('''CREATE TABLE IF NOT EXISTS KEY_LIST 
         (
             ACTIVATION_CODE TEXT PRIMARY KEY UNIQUE NOT NULL,
-            EMAIL TEXT NOT NULL,
-            ACTIVATION_STATUS TEXT DEFAULT 'Not Activated',
-            FOREIGN KEY (EMAIL) REFERENCES CLINICS(EMAIL)
-            
+            ASSIGNED_TO_EMAIL TEXT NOT NULL,
+            ACTIVATION_STATUS TEXT DEFAULT 'Not Activated'
         )''')
+    # cursor.execute('''CREATE TABLE IF NOT EXISTS KEY_LIST 
+    #     (
+    #         ACTIVATION_CODE TEXT PRIMARY KEY UNIQUE NOT NULL,
+    #         EMAIL TEXT NOT NULL,
+    #         ACTIVATION_STATUS TEXT DEFAULT 'Not Activated',
+    #         FOREIGN KEY (EMAIL) REFERENCES CLINICS(EMAIL)
+            
+    #     )''')
 
     conn.commit()
     conn.close()
@@ -175,7 +182,7 @@ def approve_registration():
             conn = sqlite3.connect(os.path.join(db_path, "database.db"))
             cursor = conn.cursor()
 
-            cursor.execute("INSERT INTO KEY_LIST (ACTIVATION_CODE, EMAIL, ACTIVATION_STATUS) VALUES (?,?,'Not Activated')", (activation_code,email))
+            cursor.execute("INSERT INTO KEY_LIST (ACTIVATION_CODE, ASSIGNED_TO_EMAIL, ACTIVATION_STATUS) VALUES (?,?,'Not Activated')", (activation_code,email))
             cursor.execute("INSERT INTO CLINICS (CLINIC_NAME, CLINIC_ADDRESS, ACTIVATION_CODE) VALUES (?,?,?)", 
                            (clinic_name, clinic_address, activation_code))
 
