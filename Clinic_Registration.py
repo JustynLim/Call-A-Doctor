@@ -232,7 +232,7 @@ def approve_registration():
             tree.delete(selected_item) # Remove approved applicant from view
             populate_tree() # Refreshes list
 
-        #   Send approval email (include activation code)
+        #   Send approval email (include activation code), disable this for testing
         send_approved_email(clinic_name, clinic_address, email, activation_code)
 
 

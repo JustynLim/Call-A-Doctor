@@ -1,6 +1,0 @@
-    cursor.execute('''CREATE TABLE IF NOT EXISTS KEY_LIST 
-        (
-            ACTIVATION_CODE TEXT PRIMARY KEY UNIQUE NOT NULL,
-            ASSIGNED_TO_EMAIL TEXT NOT NULL,
-            ACTIVATION_STATUS TEXT DEFAULT 'Not Activated',
-        )''')
