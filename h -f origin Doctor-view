@@ -1,0 +1,56 @@
+[33mcommit 97028c3105067f7f2b53c256fbedcaa8fca51043[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mDoctor-view[m[33m, [m[1;31morigin/Doctor-view[m[33m)[m
+Author: Danieltan717 <130583615+Danieltan717@users.noreply.github.com>
+Date:   Fri Jun 14 00:45:02 2024 +0800
+
+    Add files via upload
+
+[33mcommit 99505a18c0bb6d7e2e5a2df0c8205e7ab4ab145b[m
+Author: STEVEN TEO BOON JIE <133637332+ytonng@users.noreply.github.com>
+Date:   Thu Jun 13 15:07:27 2024 +0800
+
+    Add files via upload
+
+[33mcommit c8a3e5fdd2fec506bb73b6273abdf56f16140914[m
+Author: JustynLim <89184180+JustynLim@users.noreply.github.com>
+Date:   Sun May 26 05:55:25 2024 +0800
+
+    Completed clinic registration + login
+    
+    - Renamed Clinic Registration > Clinic_Registration
+    
+    - Added Clinic_Account to handle account linking with registered credentials and login
+    
+    - Added logic for switching forms for future reference
+
+[33mcommit 59c1f59f8d3eccbacf1499127dfa6c9a4fbd102d[m
+Author: JustynLim <89184180+JustynLim@users.noreply.github.com>
+Date:   Sat May 25 23:01:42 2024 +0800
+
+    Delete main.py
+
+[33mcommit f3740e5ddb6c87b2bb5b2e4a5371aa2c149c616e[m
+Author: JustynLim <89184180+JustynLim@users.noreply.github.com>
+Date:   Sat May 25 22:51:30 2024 +0800
+
+    misc changes
+
+[33mcommit 2805e3c8d84e6889d2cf23c48e1f75ef8ef3c2f3[m
+Author: JustynLim <89184180+JustynLim@users.noreply.github.com>
+Date:   Fri May 24 02:30:38 2024 +0800
+
+    Initial commit
+    
+    - Implemented logic to fetch and display records from Google Sheets
+    - Added accept and reject logic for applicants
+
+[33mcommit f2997ce42d4674b3a45a49f04204876da0a447f9[m
+Author: JustynLim <89184180+JustynLim@users.noreply.github.com>
+Date:   Fri May 24 02:27:28 2024 +0800
+
+    2nd test commit
+
+[33mcommit fb9bbaff4f67d5994623ba0859dee8540693ce9d[m
+Author: JustynLim <89184180+JustynLim@users.noreply.github.com>
+Date:   Fri May 24 02:19:12 2024 +0800
+
+    Test commit
