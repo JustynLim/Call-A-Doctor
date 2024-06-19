@@ -1,0 +1,15 @@
+<RCC>
+  <qresource>
+    <file>images/check (1).png</file>
+    <file>images/calendar.png</file>
+    <file>images/bin.png</file>
+    <file>images/check-mark.png</file>
+    <file>images/menu.png</file>
+    <file>images/doctor.png</file>
+    <file>images/cil-add.png</file>
+    <file>images/cil-home (2).png</file>
+    <file>images/cil-schedule.png</file>
+    <file>images/cil-view.png</file>
+    <file>images/logout.png</file>
+  </qresource>
+</RCC>
