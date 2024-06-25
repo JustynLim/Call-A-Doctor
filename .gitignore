@@ -1,4 +1,6 @@
+
 misc/enter.py
+misc/main.py
 misc/test3.py
 misc/resources/backup
 resources/backup/calendar_dark.png
@@ -30,3 +32,5 @@ resources/amethyst.jpg
 plyer-2.1.0-py2.py3-none-any.whl
 main.py
 tempCodeRunnerFile.py
+Test_Clinic_Registration.py
+legacy

@@ -3,7 +3,7 @@ from LoginController import LoginController
 from UI.Login_Resources import *; from UI.Register_Resources import *
 from modules.sidebar import MySideBar
 from modules.ui_doctor import Ui_MainWindow
-import sys#, webbrowser
+import sys
 
 
 logged_in_email = None
@@ -15,9 +15,11 @@ def open_main_app(success, login_controller):
         email = login_controller.login_form.lineEdit.text().lower()
         
         # Create and show the main app
-        main_app = MySideBar(doctor_email=email)  # Create the main app
-        main_app.show()
-        main_app.activateWindow()
+        if not hasattr(login_controller, 'main_app'):
+            main_app = MySideBar(doctor_email=email)
+            login_controller.main_app = main_app  # Store reference to prevent re-creation
+            main_app.show()
+            main_app.activateWindow()
 
         # Close the login window
         login_controller.close()
