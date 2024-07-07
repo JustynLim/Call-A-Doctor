@@ -1,7 +1,0 @@
-<RCC>
-  <qresource prefix="newPrefix">
-    <file>../resources/hide_password.png</file>
-    <file>../resources/show_password.png</file>
-    <file>../resources/register-background.jpg</file>
-  </qresource>
-</RCC>

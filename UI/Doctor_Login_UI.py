@@ -1,46 +1,26 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
-from doctor_utilities import login, login_display_status
-
-
-#  Allows window to be dragged around the screen
-class DraggableWidget(QtWidgets.QWidget):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self._mousePressed = False
-        self._mousePos = None
-        self._startGeometry = None
-
-    def mousePressEvent(self, event):
-        if event.button() == QtCore.Qt.LeftButton:
-            self._mousePressed = True
-            self._mousePos = event.globalPos()
-            self._startGeometry = self.geometry()
-
-    def mouseMoveEvent(self, event):
-        if self._mousePressed:
-            delta = event.globalPos() - self._mousePos
-            self.move(self._startGeometry.topLeft() + delta)
-
-    def mouseReleaseEvent(self, event):
-        if event.button() == QtCore.Qt.LeftButton:
-            self._mousePressed = False
+from PySide6 import QtCore, QtGui, QtWidgets
+from doctor_utilities import login
+from draggable_widget import DraggableWidget
 
 
 #   Creates window       
-class Login_Form(QtWidgets.QMainWindow):
-    def __init__(self, parent = None):
-        super().__init__(parent)
-        self.setupUi(self)
+class Login_Form(QtWidgets.QWidget): # Change to QWidget, not QMainWindow
+    login_successful = QtCore.Signal(bool, QtWidgets.QMainWindow)
 
+    def __init__(self, parent = None):
+        super(Login_Form, self).__init__(parent)
+        self.setupUi(self)
+        
         # Add search path for resources
         QtCore.QDir.addSearchPath("resources","../resources/")
 
-        global email_input1, password_input1
-        email_input1 = None; password_input1 = None
 
-
-    def setupUi(self, Form):
-        Form.setObjectName("Form")
+    def setupUi(self, Login_Form):
+        Form = Login_Form
+        print("setupUi Login UI")
+        print(self.layout())
+        if not Form.objectName():
+            Form.setObjectName("Form")
 
         # Dynamically adjust window size based on the screen's DPI
         screen = QtWidgets.QApplication.primaryScreen()
@@ -83,9 +63,10 @@ class Login_Form(QtWidgets.QMainWindow):
 
         self.label_4 = QtWidgets.QLabel(self.widget)
         self.label_4.setGeometry(QtCore.QRect(int(450 * scaling_factor), int(20 * scaling_factor), int(100 * scaling_factor), int(40 * scaling_factor)))
+        font = QtGui.QFont()
         font.setPointSize(int(15 * scaling_factor))
         font.setBold(True)
-        font.setWeight(75)
+        font.setWeight(QtGui.QFont.Weight.Bold)
         self.label_4.setFont(font)
         self.label_4.setStyleSheet("color:rgba(87,161,248,200);")
         self.label_4.setObjectName("label_4")
@@ -102,8 +83,10 @@ class Login_Form(QtWidgets.QMainWindow):
                                     "padding-bottom:{}px;\n""".format(int(7 * scaling_factor)))
         self.lineEdit.setObjectName("lineEdit")
         
+
         self.lineEdit_2 = QtWidgets.QLineEdit(self.widget)
         self.lineEdit_2.setGeometry(QtCore.QRect(int(400 * scaling_factor), int(200 * scaling_factor), int(190 * scaling_factor), int(40 * scaling_factor)))
+        font = QtGui.QFont()
         font.setPointSize(int(10 * scaling_factor))
         self.lineEdit_2.setFont(font)
         self.lineEdit_2.setStyleSheet("background-color:rgba(0,0,0,0);\n"
@@ -113,6 +96,7 @@ class Login_Form(QtWidgets.QMainWindow):
                                       "padding-bottom:{}px;\n""".format(int(7 * scaling_factor)))
         self.lineEdit_2.setObjectName("lineEdit_2")
         self.lineEdit_2.setEchoMode(QtWidgets.QLineEdit.Password) # Set echo mode to Password
+
 
         self.pushButton = QtWidgets.QPushButton(self.widget)
         self.pushButton.setGeometry(QtCore.QRect(int(400 * scaling_factor), int(338 * scaling_factor), int(190 * scaling_factor), int(30 * scaling_factor)))
@@ -124,9 +108,10 @@ class Login_Form(QtWidgets.QMainWindow):
         self.pushButton.clicked.connect(self.signin)
         
         self.label_5 = QtWidgets.QLabel(self.widget)
-        self.label_5.setGeometry(QtCore.QRect(int(410 * scaling_factor), int(410 * scaling_factor), int(140 * scaling_factor), int(16 * scaling_factor)))
+        self.label_5.setGeometry(QtCore.QRect(int(430 * scaling_factor), int(410 * scaling_factor), int(140 * scaling_factor), int(16 * scaling_factor)))
         font.setPointSize(int(7 * scaling_factor))
         self.label_5.setFont(font)
+        # self.label_5.setAlignment(QtCore.Qt.AlignCenter)
         self.label_5.setObjectName("label_5")
 
         self.label_6 = QtWidgets.QLabel(self.widget)
@@ -137,7 +122,7 @@ class Login_Form(QtWidgets.QMainWindow):
         self.label_6.setObjectName("label_6")
 
         self.toolButton = QtWidgets.QToolButton(self.widget)
-        self.toolButton.setGeometry(QtCore.QRect(int(520 * scaling_factor), int(410 * scaling_factor), int(43 * scaling_factor), int(17 * scaling_factor)))
+        self.toolButton.setGeometry(QtCore.QRect(int(520 * scaling_factor), int(410 * scaling_factor), int(90 * scaling_factor), int(17 * scaling_factor)))
         font.setPointSize(int(7 * scaling_factor))
         self.toolButton.setFont(font)
         self.toolButton.setStyleSheet("background-color:rgba(0,0,0,0);\n"
@@ -159,34 +144,28 @@ class Login_Form(QtWidgets.QMainWindow):
         self.label_7.setFont(font)
         self.label_7.setText("")
         self.label_7.setObjectName("label_7")
-
-        self.checkBox = QtWidgets.QCheckBox(self.widget)
-        self.checkBox.setGeometry(QtCore.QRect(int(600 * scaling_factor), int(206 * scaling_factor), int(24 * scaling_factor), int(24 * scaling_factor)))
-        #self.checkBox.setGeometry(QtCore.QRect(int(565 * scaling_factor), int(206 * scaling_factor), int(24 * scaling_factor), int(24 * scaling_factor)))
-        self.checkBox.setStyleSheet("QCheckBox::indicator:checked{image: url(:/resources/hide_password.png);}\n"
-                                    "QCheckBox::indicator:unchecked{image: url(:/resources/show_password.png);}")
-        self.checkBox.setText("")
-        self.checkBox.setObjectName("checkBox")
-        self.checkBox.stateChanged.connect(self.toggle_password_visibility)
+        
+        icon_size = QtCore.QSize(24,24)
+        self.toggle_button = QtWidgets.QPushButton(self.widget)
+        self.toggle_button.setGeometry(QtCore.QRect(int(600 * scaling_factor), int(206 * scaling_factor), int(30 * scaling_factor), int(30 * scaling_factor)))
+        self.toggle_button.setStyleSheet("border: 1px solid transparent;")
+        self.toggle_button.setIcon(QtGui.QIcon(":/resources/show_password.png"))  # Set initial icon
+        self.toggle_button.setIconSize(icon_size)
+        self.toggle_button.setCheckable(True)
+        self.toggle_button.setChecked(False)
+        self.toggle_button.clicked.connect(self.toggle_password_visibility)
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
         Form.setTabOrder(self.lineEdit, self.lineEdit_2)
-        Form.setTabOrder(self.lineEdit_2, self.checkBox)
-        Form.setTabOrder(self.checkBox, self.toolButton)
+        Form.setTabOrder(self.lineEdit_2, self.toggle_button)
+        Form.setTabOrder(self.toggle_button, self.toolButton)
         Form.setTabOrder(self.toolButton, self.pushButton)
         Form.setTabOrder(self.pushButton, self.toolButton)
 
         self.lineEdit.returnPressed.connect(self.pushButton.click)
         self.lineEdit_2.returnPressed.connect(self.pushButton.click)
 
-
-    def toggle_password_visibility(self,state):
-         if state == QtCore.Qt.Checked:
-              self.lineEdit_2.setEchoMode(QtWidgets.QLineEdit.Normal)       # Display password in plaintext format
-         
-         else:
-              self.lineEdit_2.setEchoMode(QtWidgets.QLineEdit.Password)     # Display password using '*'
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
@@ -199,22 +178,26 @@ class Login_Form(QtWidgets.QMainWindow):
         self.toolButton.setText(_translate("Form", "Activate account"))
         #self.toolButton_2.setText(_translate("Form", "Forgot Password?"))
 
+
     def signin(self):
-        global email_input1, password_input1
-        email_input1 = self.lineEdit.text().lower(); password_input1 = self.lineEdit_2.text()
-        
-        if email_input1 and password_input1:
-            login_result = login(self.parent(), email_input1, password_input1) # Get login result
-            
-            if login_result:
-                login_display_status(self.parent(), 1)
-            else:
-                login_display_status(self.parent(), 0)
-        
-        else:
-            login_display_status(self.parent(), 0)
-    
+        email = self.lineEdit.text().lower(); password = self.lineEdit_2.text()
+
+        success = login(self.parent(), email, password)
+        self.login_successful.emit(success, self.parent()) # Emit tuple (success, login_controller)
+
+
     def show_register_page(self):
-         self.parent().show_register_form()
-         self.lineEdit.clear()
-         self.lineEdit_2.clear()
+        # Get the top-level LoginController instance
+        controller = self.parent().parent()  
+        controller.show_register_form()
+        self.lineEdit.clear()
+        self.lineEdit_2.clear()
+
+
+    def toggle_password_visibility(self):
+        if self.toggle_button.isChecked():
+            self.lineEdit_2.setEchoMode(QtWidgets.QLineEdit.Normal)                     # Display password in plaintext
+            self.toggle_button.setIcon(QtGui.QIcon(":/resources/hide_password.png"))
+        else:
+            self.lineEdit_2.setEchoMode(QtWidgets.QLineEdit.Password)                   # Display password using '*'
+            self.toggle_button.setIcon(QtGui.QIcon(":/resources/show_password.png"))

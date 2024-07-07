@@ -1,126 +1,52 @@
-from PyQt5 import QtCore, QtGui,QtWidgets
-from UI.Login_UI import *; from UI.Register_UI import *
-#from UI.Login_UI import Login_Form; from UI.Register_UI import Register_Form
+from PySide6 import QtCore, QtGui, QtWidgets
+from PySide6.QtCore import QTimer
+from ClinicLoginController import LoginController
 from UI.Login_Resources import *; from UI.Register_Resources import *
-from utilities import login, register, login_display_status, register_display_status
+from Clinicmodules.clinic_main_app import MySideBar        
+from Clinicmodules.clinicUI import Ui_MainWindow    
 import sys
 
 
-#  Global variables
-#path_db_file    = "db/database.db"
-form_type       = 1
+
 logged_in_email = None
 
-#  Allows window to be dragged around the screen
-class DraggableWidget(QtWidgets.QWidget):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self._mousePressed = False
-        self._mousePos = None
-        self._startGeometry = None
+def open_main_app(success, login_controller):
+    if success:
+        # Fetch the logged-in email from the LoginController
+        email = login_controller.login_form.lineEdit.text().lower()
 
-    def mousePressEvent(self, event):
-        if event.button() == QtCore.Qt.LeftButton:
-            self._mousePressed = True
-            self._mousePos = event.globalPos()
-            self._startGeometry = self.geometry()
+        def create_main_app():    
+            # Create and show the main app
+            if not hasattr(login_controller, 'main_app'):
+                main_app = MySideBar(clinic_email=email)  # Create the main app
+                main_app.show()
+                main_app.activateWindow()
+            else:
+                login_controller.main_app.show()
+                login_controller.main_app.activateWindow()
 
-    def mouseMoveEvent(self, event):
-        if self._mousePressed:
-            delta = event.globalPos() - self._mousePos
-            self.move(self._startGeometry.topLeft() + delta)
+            # Close the login window
+            login_controller.close()
 
-    def mouseReleaseEvent(self, event):
-        if event.button() == QtCore.Qt.LeftButton:
-            self._mousePressed = False
+        # Set a single-shot timer to delay the showing of the main app
+        QTimer.singleShot(500, create_main_app)
 
 
-class MainController(DraggableWidget):
-    login_finished = QtCore.pyqtSignal(bool) # Signal to indicate login finished
-    registration_finished = QtCore.pyqtSignal(bool) # added this
-    
-    def __init__(self, screen):
-        super().__init__()
-            
-        # Initialise UI widgets
-        self.login_widget = Login_Form(self)
-        self.register_widget = Register_Form(self)
 
-        # Creates a central widget to hold all forms and a layout manager
-        self.stacked_layout = QtWidgets.QStackedLayout(self)
-        self.stacked_layout.addWidget(self.login_widget)
-        self.stacked_layout.addWidget(self.register_widget)
-
-        # Set the central widget of the main window
-        self.setLayout(self.stacked_layout)
-
-        # Connect buttons for page switching
-        self.login_widget.pushButton.clicked.connect(lambda: login(self, self.login_widget.lineEdit.text(), self.login_widget.lineEdit_2.text()))
-        self.login_widget.toolButton.clicked.connect(self.show_register_form)
-        self.register_widget.toolButton_5.clicked.connect(self.show_login_form)
-        # self.register_widget.pushButton_2.clicked.connect(lambda: register(self.register_widget, self.register_widget.lineEdit_5.text(), self.register_widget.lineEdit_6.text(), self.register_widget.lineEdit_7.text(), self.register_widget.lineEdit_8.text()))
-        ###self.register_widget.pushButton_2.clicked.connect(lambda: register(self.register_widget.lineEdit_5.text(), self.register_widget.lineEdit_6.text(), self.register_widget.lineEdit_8.text()))
-
-        self.login_finished.connect(self.display_login_status)
-        self.registration_finished.connect(self.display_registration_status) # added this
-
-        # Initialise program with login form
-        self.show_login_form()
-
-        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-
-        # screen = QtWidgets.QApplication.primaryScreen()
-        dpi = screen.physicalDotsPerInch()
-        scaling_factor = dpi / 96.0     # Standard DPI is 96
-        self.resize(int(750 * scaling_factor), int(540 * scaling_factor))
-        
-        self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
-        
-
-
-    def show_register_form(self):
-        # QtCore.QTimer.singleShot(500, lambda: self.stacked_layout.setCurrentWidget(self.register_widget))
-        self.stacked_layout.setCurrentWidget(self.register_widget)
-        self.register_widget.lineEdit_5.setFocus()
-        # self.register_widget.lineEdit_5.activateWindow()
-
-
-    def show_login_form(self):
-        # QtCore.QTimer.singleShot(500, lambda: self.stacked_layout.setCurrentWidget(self.login_widget))
-        self.stacked_layout.setCurrentWidget(self.login_widget)
-
-    def handle_login(self):
-        email = self.login_widget.lineEdit.text().lower()
-        password = self.login_widget.lineEdit_2.text()
-        login_result = login(self, email, password)  # Update utilities.py accordingly
-        self.login_finished.emit(login_result)  # Emit signal after login attempt
-
-    def handle_register_XX(self):
-        email = self.register_widget.lineEdit_5.text().lower()
-        password = self.register_widget.lineEdit_6.text()
-        confirm_password = self.register_widget.lineEdit_7.text()
-        activation_code = self.register_widget.lineEdit_8.text()
-        register_result = register(self, email, password, confirm_password, activation_code)
-        self.registration_finished.emit(register_result)
-
-    def display_login_status(self, success):
-        if success:
-            login_display_status(self, 1)
-        else:
-            login_display_status(self, 0)
-
-    def display_registration_status(self, status):
-        register_display_status(self, status)
         
 if __name__ == '__main__':
     import ctypes
     ctypes.windll.shcore.SetProcessDpiAwareness(2)
-    QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
+    QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True)
 
-    app = QtWidgets.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)  # Ensure QApplication is created first
+    print("QApplication initialised")
     screen = app.primaryScreen()
-    controller = MainController(screen)
-    controller.register_widget.registration_finished.connect(controller.display_registration_status)
 
-    controller.show()
-    sys.exit(app.exec_())
+    login_controller = LoginController()
+    login_controller.setupUI(screen)
+    
+    login_controller.show_main_app_signal.connect(lambda success : open_main_app (success, login_controller)) 
+    login_controller.show()
+
+    sys.exit(app.exec())
