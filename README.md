@@ -3,12 +3,12 @@
 This project was created for the coursework: Software Engineering (5001CEM)
 
 # Group Details
-Group number: 4
-Members:
-Lim Weng Hong
-Oon Jay Von
-Steven Teo Boon Jie
-Tan Koon Teng
+## Group number: 4
+## Members:
+## Lim Weng Hong
+## Oon Jay Von
+## Steven Teo Boon Jie
+## Tan Koon Teng
 
 # Prerequisites
 Inside 'credentials.zip':
@@ -57,16 +57,16 @@ Features:
 
 # Contributions:
 
-Lim Weng Hong
+**Lim Weng Hong**
 - Login & Registration (logics & UI) 
 - Page controllers for Clinic, Doctor, and Patient views (switch pages after successful login)
 - Clinic registration app
 
-Oon Jay Von
+**Oon Jay Von**
 - Main app for clinic view (functional logics & UI)
 
-Steven Teo Boon Jie
+**Steven Teo Boon Jie**
 - Main app for patient view (functional logics & UI)
 
-Tan Koon Teng
+**Tan Koon Teng**
 - Main app for doctor view (functional logics & UI)
