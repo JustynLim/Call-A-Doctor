@@ -2,13 +2,15 @@
 
 This project was created for the coursework: Software Engineering (5001CEM)
 
-# Group Details
-## Group number: 4
-## Members:
-## Lim Weng Hong
-## Oon Jay Von
-## Steven Teo Boon Jie
-## Tan Koon Teng
+## Group Details
+
+Group number: 4
+
+Members:
+- Lim Weng Hong
+- Oon Jay Von
+- Steven Teo Boon Jie
+- Tan Koon Teng
 
 # Prerequisites
 Inside 'credentials.zip':
